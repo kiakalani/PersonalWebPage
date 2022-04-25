@@ -231,3 +231,12 @@ function render_call()
 
 
 window.onload = render_call;
+
+
+window.onresize = function()
+{
+    let canvas = document.querySelector("#gl_Canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    webgl_instance.gl.viewport(0.0, 0.0, canvas.width, canvas.height);
+}

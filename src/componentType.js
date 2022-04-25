@@ -288,17 +288,6 @@ class Quaternion
 
     get_mat4()
     {
-        // Result[0][0] = T(1) - T(2) * (qyy +  qzz);
-		// Result[0][1] = T(2) * (qxy + qwz);
-		// Result[0][2] = T(2) * (qxz - qwy);
-
-		// Result[1][0] = T(2) * (qxy - qwz);
-		// Result[1][1] = T(1) - T(2) * (qxx +  qzz);
-		// Result[1][2] = T(2) * (qyz + qwx);
-
-		// Result[2][0] = T(2) * (qxz + qwy);
-		// Result[2][1] = T(2) * (qyz - qwx);
-		// Result[2][2] = T(1) - T(2) * (qxx +  qyy);
         let mat = new Matrix4();
         mat.mat[0] = 1.0 - 2.0 * (this.rotation.vecs[2] * this.rotation.vecs[2] + this.rotation.vecs[3] * this.rotation.vecs[3]);
         mat.mat[1] = 2.0 * (this.rotation.vecs[1] * this.rotation.vecs[2] + this.rotation.vecs[0] * this.rotation.vecs[3]);

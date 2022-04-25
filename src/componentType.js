@@ -328,6 +328,7 @@ class ComponentType
         this.position = Vector.vec3_zero();
         this.rotation = new Quaternion();
         this.scale = Vector.vec3_one();
+        this.scale.vecs[0] = 0.5;
     }
 
 
@@ -356,7 +357,7 @@ class ComponentType
 
 
         (this.rotation.multiply(Quaternion.angleAxis(0.1, 0.0, 0.0, 1.0)).normalize());
-        this.rotation = this.rotation.multiply(Quaternion.angleAxis(0.01, 1.0, 0.0, 0.0));
+        this.rotation = this.rotation.multiply(Quaternion.angleAxis(0.01, 0.0, 1.0, 0.0));
 
 
 

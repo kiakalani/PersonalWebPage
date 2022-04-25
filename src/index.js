@@ -59,7 +59,7 @@ void main()
     gl_FragColor = vec4(uv_interp.xy, 0.0, 1.0);
 }
         `);
-        this.sampleBuffers = this.create_cube_buffer();
+        this.sampleBuffers = this.star_buffer();
         this.test_item = new ComponentType(this.sampleShader, null, this.sampleBuffers);
         this.camera = new Camera();
 
@@ -99,6 +99,43 @@ void main()
                 2, 7, 6,
                 4, 0, 7,
                 0, 3, 7
+            ]
+        )
+    }
+
+    star_buffer()
+    {
+        return this.create_buffer(
+            [
+                0.0, 0.5, 0.0,          0.5, 1.0,
+                -0.20, 0.20, 0.0,       0.20, 0.70,
+                0.20, 0.20, 0.0,        0.70, 0.70,
+                -0.5, 0.0, 0.0,         0.0, 0.5,
+                0.0, 0.0, 0.2,          0.5, 0.5,
+                0.5, 0.0, 0.0,          1.0, 0.5,
+                -0.20, -0.20, 0.0,      0.20, 0.20,
+                0.20, -0.20, 0.0,       0.70, 0.20,
+                0.0, -0.5, 0.0,         0.5, 0.0,
+                0.0, 0.0, -0.2,         0.5, 0.5
+            ],
+            [
+               0, 1, 4,
+               0, 1, 9,
+               0, 2, 4,
+               0, 2, 9,
+               3, 1, 4,
+               3, 1, 9,
+               3, 6, 4,
+               3, 6, 9,
+               2, 4, 5,
+               2, 9, 5,
+               5, 4, 7,
+               5, 9, 7,
+               6, 4, 8,
+               6, 9, 8,
+               8, 7, 4,
+               8, 7, 9
+
             ]
         )
     }

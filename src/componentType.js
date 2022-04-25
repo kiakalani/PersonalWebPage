@@ -346,7 +346,7 @@ class ComponentType
 
 
         (this.rotation.multiply(Quaternion.angleAxis(0.1, 0.0, 0.0, 1.0)).normalize());
-        this.rotation = this.rotation.multiply(Quaternion.angleAxis(0.01, 0.0, 1.0, 0.0));
+        this.rotation = this.rotation.multiply(Quaternion.angleAxis(1.0 * webgl_instance.delta_time, 0.0, 1.0, 0.0));
 
 
 

@@ -26,6 +26,8 @@ class WebGlSrc
             return;
         }
 
+        this.prev_refresh = new Date().getUTCMilliseconds();
+        this.delta_time = 0.0;
 
 
         this.sampleShader = this.create_shader(
@@ -197,6 +199,17 @@ void main()
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.test_item.render(this.gl, this.camera);
+
+        let c_time = new Date().getUTCMilliseconds();
+
+        this.delta_time = c_time - this.prev_refresh;
+
+        this.delta_time *= 0.001;
+
+        if (this.delta_time < 0.0) this.delta_time = 0.0;
+
+        this.prev_refresh = c_time;
+
         
         
         

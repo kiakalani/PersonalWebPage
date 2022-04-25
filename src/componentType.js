@@ -318,6 +318,7 @@ class ComponentType
         this.rotation = new Quaternion();
         this.scale = Vector.vec3_one();
         this.scale.vecs[0] = 0.5;
+        this.scale.vecs[2] = 0.5;
     }
 
 

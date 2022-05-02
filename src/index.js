@@ -42,12 +42,13 @@ varying vec3 pos;
 
 uniform mat4 transformation_mat;
 uniform mat4 view_mat;
+uniform mat4 projection_mat;
 
 void main()
 {
     uv_interp = uv_val;
     pos = vertex;
-    gl_Position = view_mat * transformation_mat * vec4(vertex, 1.0);
+    gl_Position = view_mat * projection_mat * transformation_mat * vec4(vertex, 1.0);
 }
         `, 
         

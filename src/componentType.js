@@ -359,7 +359,7 @@ class ComponentType
 
         (this.rotation.multiply(Quaternion.angleAxis(0.1, 0.0, 0.0, 1.0)).normalize());
         this.rotation = this.rotation.multiply(Quaternion.angleAxis(1.0 * webgl_instance.delta_time, 0.0, 1.0, 0.0)).normalize();
-        //this.rotation = this.rotation.multiply(Quaternion.angleAxis(1.0 * webgl_instance.delta_time, 1.0, 0.0, 0.0)).normalize();
+        this.rotation = this.rotation.multiply(Quaternion.angleAxis(1.0 * webgl_instance.delta_time, 1.0, 0.0, 0.0)).normalize();
 
 
 
@@ -395,6 +395,7 @@ class Camera
         gl.uniformMatrix4fv(gl.getUniformLocation(shader, "view_mat"), false,
          new Float32Array(this.get_view_mat().mat));
         
+        gl.uniformMatrix4fv(gl.getUniformLocation(shader, "projection_mat"), false, new Float32Array(this.get_projection_mat(45.0, 0.1, 1000.0).mat));
         
 
 
@@ -424,6 +425,22 @@ class Camera
         fmat.mat[13] = up.dot(this.position) * -1.0;
         fmat.mat[14] = fwd.dot(this.position) * -1.0;
         return fmat;
+    }
+
+    get_projection_mat(fov, ncplane, fcplane)
+    {
+        let ret_mat = new Matrix4();
+        let cv = document.querySelector("#gl_Canvas");
+        let ratio = cv.width / cv.height;
+        let thalf = Math.tan(fov * 0.5);
+
+
+        ret_mat.set(0, 0, 1.0 / (ratio * thalf));
+        ret_mat.set(1, 1, 1.0 / thalf);
+        ret_mat.set(2, 2, - (fcplane + ncplane) / (fcplane - ncplane));
+        ret_mat.set(2, 3, -1.0);
+        ret_mat.set(3, 2, - (2.0 * fcplane * ncplane) / (fcplane - ncplane));
+        return ret_mat;
     }
 
 

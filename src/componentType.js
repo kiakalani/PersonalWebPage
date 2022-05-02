@@ -335,6 +335,17 @@ class ComponentType
 
         gl.useProgram(this.shader);
 
+        gl.uniform1i(gl.getUniformLocation(this.shader, "texture_add"), this.texture);
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
+
+
+
+
+
+
         camera.render(gl, this.shader);
         gl.uniformMatrix4fv(gl.getUniformLocation(this.shader, "transformation_mat"), false,
          new Float32Array(this.position.as_transform_matrix().multiply(this.rotation.get_mat4()).multiply(this.scale.as_scale_matrix()).mat));
@@ -347,11 +358,12 @@ class ComponentType
 
 
         (this.rotation.multiply(Quaternion.angleAxis(0.1, 0.0, 0.0, 1.0)).normalize());
-        this.rotation = this.rotation.multiply(Quaternion.angleAxis(1.0 * webgl_instance.delta_time, 0.0, 1.0, 0.0));
+        this.rotation = this.rotation.multiply(Quaternion.angleAxis(1.0 * webgl_instance.delta_time, 0.0, 1.0, 0.0)).normalize();
+        //this.rotation = this.rotation.multiply(Quaternion.angleAxis(1.0 * webgl_instance.delta_time, 1.0, 0.0, 0.0)).normalize();
 
 
 
-        
+        //camera.position.vecs[0] += 0.1 * webgl_instance.delta_time;
 
     }
 }

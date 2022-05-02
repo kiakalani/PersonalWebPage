@@ -18,8 +18,8 @@ class WebGlSrc
     constructor()
     {
         let canvas = document.querySelector("#gl_Canvas");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth - 15.0;
+        canvas.height = window.innerHeight - 15.0;
         this.gl = canvas.getContext("webgl");
         if (!this.gl) {
             document.write("<h1> WebGL is not supported by your system</h1>");
@@ -55,18 +55,18 @@ void main()
 #version 100
 varying highp vec2 uv_interp;
 varying highp vec3 pos;
-
+uniform sampler2D texture_add;
 void main()
 {
-    gl_FragColor = vec4(uv_interp.xy, 0.0, 1.0);
+    gl_FragColor = texture2D(texture_add, uv_interp);//vec4(0.0, uv_interp.xy, 1.0);
 }
         `);
         this.sampleBuffers = this.star_buffer();
-        this.test_item = new ComponentType(this.sampleShader, null, this.sampleBuffers);
+
+        this.sampleTexture = this.create_texture("src/img.jpg");
+        this.test_item = new ComponentType(this.sampleShader, this.sampleTexture, this.sampleBuffers);
         this.camera = new Camera();
-
-
-
+        
 
 
     }
@@ -83,10 +83,10 @@ void main()
                 -0.5, 0.5, -0.5,   0.0, 1.0,
                 0.5, 0.5, -0.5,    1.0, 1.0,
                 0.5, -0.5, -0.5,   1.0, 0.0,
-                -0.5, -0.5, 0.5,   1.0, 0.0,
-                -0.5, 0.5, 0.5,    1.0, 1.0,
-                0.5, 0.5, 0.5,     0.0, 0.0,
-                0.5, -0.5, 0.5,    0.0, 1.0
+                -0.5, -0.5, 0.5,   0.0, 0.0,
+                -0.5, 0.5, 0.5,    0.0, 1.0,
+                0.5, 0.5, 0.5,     1.0, 1.0,
+                0.5, -0.5, 0.5,    1.0, 0.0
             ],
             [
                 0, 1, 2,
@@ -193,6 +193,51 @@ void main()
         return {vbo:vbo, ebo:ebo, size: indices.length};
     }
 
+    _load_texture(texture, gl, img)
+    {
+
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        //texture.__image = undefined;
+            
+    }
+
+    create_texture(path)
+    {
+        let tex = this.gl.createTexture();
+        this.gl.bindTexture(this.gl.TEXTURE_2D, tex);
+            
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 255]));
+
+        tex.__image = new Image();
+        let ltex = this._load_texture;
+        let gl = this.gl;
+
+
+        tex.__image.onload = function()
+        {
+
+            ltex(tex, gl, tex.__image);
+        }
+        tex.__image.src = path;
+
+        
+        return tex;
+    }
+
     main()
     {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -206,7 +251,7 @@ void main()
 
         this.delta_time *= 0.001;
 
-        if (this.delta_time < 0.0) this.delta_time = 0.0;
+        if (this.delta_time < 0.0) this.delta_time = 0.001;
 
         this.prev_refresh = c_time;
 
@@ -236,7 +281,7 @@ window.onload = render_call;
 window.onresize = function()
 {
     let canvas = document.querySelector("#gl_Canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth - 15.0;
+    canvas.height = window.innerHeight - 15.0;
     webgl_instance.gl.viewport(0.0, 0.0, canvas.width, canvas.height);
 }
